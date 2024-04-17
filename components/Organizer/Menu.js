@@ -29,7 +29,7 @@ function MenuItem({ item, editItem, deleteItem }) {
           item.customize.map((custom) => (
             <View style={itemStyles.customizeHeader} key={custom.name}>
               <Text style={itemStyles.customizeText}>
-                {custom.name}: {custom.options.join(", ")}
+                {custom.name}: {custom.options?.join(", ")}
               </Text>
             </View>
           ))}
@@ -110,9 +110,6 @@ function Menu({ menu, setMenu }) {
   }
 
   function saveEditItem() {
-    console.log(menu.map((s) => s.data));
-    console.log(editItemSection);
-    console.log(editItemIndex);
     setMenu(
       menu.map((section) =>
         section.id === editItemSection.id
@@ -168,7 +165,10 @@ function Menu({ menu, setMenu }) {
             ...menu,
             {
               ...editSection,
-              id: Math.max(menu.map((section) => section.id)) + 1,
+              id:
+                menu.length > 0
+                  ? Math.max(...menu.map((section) => section.id)) + 1
+                  : 1,
               data: [],
             },
           ]

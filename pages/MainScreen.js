@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator>
     <Tab.Screen
-      name="Organizer"
+      name="Host"
       component={Organizer}
       options={({ navigation, route }) => ({
         headerRight: () => <Button title="Add new" />,

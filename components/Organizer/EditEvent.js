@@ -14,8 +14,11 @@ import Menu from "./Menu";
 
 function EditEvent({ event, setEvent, saveEvent }) {
   return (
+    // <Modal animationType="none" transparent={true} visible={event != null}>
+    //   <View style={styles.container3} />
     <Modal
       animationType="slide"
+      transparent={true}
       visible={event != null}
       onRequestClose={() => {
         Alert.alert("Modal has been closed.");
@@ -23,38 +26,58 @@ function EditEvent({ event, setEvent, saveEvent }) {
       }}
     >
       {event && (
-        <SafeAreaView style={styles.container}>
-          <View style={{ flexDirection: "row", gap: 10 }}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder="Event name"
-                style={styles.input}
-                value={event.name}
-                onChangeText={(val) => setEvent({ ...event, name: val })}
-              />
+        <View style={styles.container}>
+          <View style={styles.container3}>
+            <View style={styles.container2}>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder="Event name"
+                    style={styles.input}
+                    value={event.name}
+                    onChangeText={(val) => setEvent({ ...event, name: val })}
+                  />
+                </View>
+                <DatePicker
+                  date={event.date}
+                  setDate={(val) => setEvent({ ...event, date: val })}
+                />
+              </View>
+              <View style={styles.menuContainer}>
+                <Menu
+                  menu={event.menu}
+                  setMenu={(val) => setEvent({ ...event, menu: val })}
+                />
+              </View>
+              <Button onPress={saveEvent} title="Save" />
             </View>
-            <DatePicker
-              date={event.date}
-              setDate={(val) => setEvent({ ...event, date: val })}
-            />
           </View>
-          <View style={styles.menuContainer}>
-            <Menu
-              menu={event.menu}
-              setMenu={(val) => setEvent({ ...event, menu: val })}
-            />
-          </View>
-          <Button onPress={saveEvent} title="Save" />
-        </SafeAreaView>
+        </View>
       )}
     </Modal>
+    // </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    // padding: 16,
     flex: 1,
+    // backgroundColor: "white",
+  },
+  container2: {
+    marginTop: 100,
+    padding: 16,
+    flex: 1,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  container3: {
+    // marginTop: 100,
+    // padding: 16,
+    flex: 1,
+    backgroundColor: "rgba(64, 64, 64, .5)",
   },
   inputContainer: {
     borderWidth: 1,
