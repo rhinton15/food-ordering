@@ -286,7 +286,6 @@ function EditMenuItem({ editItem, setEditItem, saveEditItem }) {
   }
 
   function confirmDeleteSection(section) {
-    console.log(section);
     Alert.alert(
       "Confirm",
       `Are you sure you want to delete ${section.name} section? This will also delete all options under this section.`,
@@ -339,27 +338,27 @@ function EditMenuItem({ editItem, setEditItem, saveEditItem }) {
                 onChangeText={(val) => setEditItem({ ...editItem, name: val })}
               />
             </View>
-            {editItem.customize && (
-              <View style={styles.scrollViewContainer}>
-                <ScrollView>
-                  {editItem.customize.map((section) => (
+            <View style={styles.scrollViewContainer}>
+              <ScrollView>
+                {editItem.customize &&
+                  editItem.customize.map((section) => (
                     <CustomizationSection
                       section={section}
-                      key={section.name}
+                      key={section.id}
                       editSection={() => setEditSection(section)}
                       deleteSection={() => confirmDeleteSection(section)}
                       editSectionOption={editSectionOption}
                       deleteSectionOption={confirmDeleteSectionOption}
                     />
                   ))}
-                  <AddButton
-                    title="customization"
-                    style={addItemStyles.sectionButton}
-                    addItem={() => setEditSection({})}
-                  />
-                </ScrollView>
-              </View>
-            )}
+
+                <AddButton
+                  title="customization"
+                  style={addItemStyles.sectionButton}
+                  addItem={() => setEditSection({})}
+                />
+              </ScrollView>
+            </View>
             <Button onPress={saveEditItem} title="Save" />
           </SafeAreaView>
         )}

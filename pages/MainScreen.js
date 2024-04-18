@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator>
     <Tab.Screen
-      name="Host"
+      name="Events"
       component={Organizer}
       options={({ navigation, route }) => ({
         headerRight: () => <Button title="Add new" />,
@@ -22,7 +22,7 @@ const TabNavigator = () => (
       })}
     />
     <Tab.Screen
-      name="User"
+      name="Order"
       component={User}
       options={{
         tabBarIcon: ({ size, color }) => (
@@ -31,7 +31,7 @@ const TabNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Chef"
+      name="Cook"
       component={Chef}
       options={{
         tabBarIcon: ({ size, color }) => (
