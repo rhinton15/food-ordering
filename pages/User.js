@@ -16,8 +16,8 @@ function User(props) {
     const unsub = onSnapshot(
       doc(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG"),
       (doc) => {
-        // setMenu(doc.data().menu);
-        setMenu([...doc.data().menu, ...doc.data().menu]);
+        setMenu(doc.data().menu);
+        // setMenu([...doc.data().menu, ...doc.data().menu]);
       }
     );
     return unsub;
@@ -38,7 +38,7 @@ function User(props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    // padding: 8,
     backgroundColor: "white",
     flex: 1,
   },
