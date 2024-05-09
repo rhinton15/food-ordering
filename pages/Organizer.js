@@ -90,9 +90,6 @@ function Organizer({ navigation }) {
       const docData = doc.data();
       dbEvents.push({ ...docData, id: doc.id, date: docData.date?.toDate() });
     });
-    // const allEvents = eventsInit.concat(dbEvents);
-    // allEvents.sort((a, b) => a.date - b.date);
-    // setEvents(allEvents);
     dbEvents.sort((a, b) => a.date - b.date);
     setEvents(dbEvents);
   }
@@ -118,12 +115,6 @@ function Organizer({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* <Text>
-        Organizer should be able to create a new event and add menu items to
-        event. Can also copy menu from another event. Menu items can have
-        customizations. Can there also be an event agenda? RSVP? People can tell
-        what they are bringing
-      </Text> */}
       <Events events={events} setEvent={setEvent} />
       <EditEvent event={event} setEvent={setEvent} saveEvent={saveEvent} />
     </View>
@@ -132,8 +123,6 @@ function Organizer({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    // borderWidth: 1,
-    // borderRadius: 5,
     padding: 8,
   },
 });

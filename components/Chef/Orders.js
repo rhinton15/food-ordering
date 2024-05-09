@@ -34,10 +34,8 @@ function OrderItem({ item }) {
         {!isMadeToOrder ? (
           <MaterialCommunityIcons name="check" color="#bbbbbb" />
         ) : (
-          //   <MaterialCommunityIcons name="check-bold" color="#30ba55" />
           <MaterialCommunityIcons name="exclamation-thick" color="#ff3d3d" />
         )}
-        {/* <MaterialCommunityIcons name="check" size={24} color="#30ba55" /> */}
         <Text
           style={{ width: 20, fontWeight: isMadeToOrder ? "bold" : "normal" }}
         >
@@ -110,7 +108,6 @@ function Orders(props) {
     <ScrollView style={{ padding: 8 }}>
       {orders
         .sort((a, b) => a.time - b.time)
-        // .sort((a, b) => a.done - b.done)
         .map((order, i) => (
           <Order key={i} order={order} />
         ))}

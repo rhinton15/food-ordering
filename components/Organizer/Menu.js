@@ -80,19 +80,6 @@ function MenuCategory({ title, editCategory, deleteCategory }) {
   );
 }
 
-// function MenuCategory({ category }) {
-//   return (
-//     <View style={categoryStyles.container}>
-//       <View style={categoryStyles.headerContainer}>
-//         <Text style={categoryStyles.label}>{category.category}</Text>
-//       </View>
-//       {category.items.map((item) => (
-//         <MenuItem item={item} key={item.name} />
-//       ))}
-//     </View>
-//   );
-// }
-
 function Menu({ menu, setMenu }) {
   const [editItem, setEditItem] = useState(null);
   const [editItemSection, setEditItemSection] = useState(null);
@@ -223,7 +210,6 @@ function Menu({ menu, setMenu }) {
             deleteCategory={() => confirmDeleteSection(section)}
           />
         )}
-        // SectionSeparatorComponent={ItemSeparator}
         ItemSeparatorComponent={ItemSeparator}
         renderSectionFooter={({ section }) => (
           <AddButton title="item" addItem={() => addMenuItem(section)} />
@@ -236,16 +222,9 @@ function Menu({ menu, setMenu }) {
           />
         )}
       />
-      {/* <Text>TODO: make this reorderable</Text> */}
     </>
   );
 }
-
-// function Menu({ menu }) {
-//   return menu.map((category) => (
-//     <MenuCategory category={category} key={category.category} />
-//   ));
-// }
 
 const itemStyles = StyleSheet.create({
   customizeHeader: {
@@ -277,14 +256,12 @@ const addItemStyles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     alignItems: "center",
-    // justifyContent: "center",
     flexDirection: "row",
     marginVertical: 4,
   },
   buttonText: {
     fontSize: 18,
     color: "#ccc",
-    // paddingBottom: 1,
   },
   sectionButton: {
     height: 100,
@@ -299,7 +276,6 @@ const categoryStyles = StyleSheet.create({
   headerContainer: {
     borderBottomWidth: 1,
     paddingVertical: 8,
-    // backgroundColor: "#fff",
   },
   label: {
     fontSize: 20,

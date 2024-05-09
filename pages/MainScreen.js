@@ -35,7 +35,6 @@ const TabNavigator = () => (
       name="Cook"
       component={Cook}
       options={{
-        // headerShown: false,
         tabBarIcon: ({ size, color }) => (
           <MaterialCommunityIcons name="chef-hat" size={size} color={color} />
         ),

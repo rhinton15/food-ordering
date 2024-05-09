@@ -154,8 +154,6 @@ const sectionStyles = StyleSheet.create({
   headerContainer: {
     borderBottomWidth: 1,
     paddingVertical: 8,
-    // overflow: "hidden",
-    // borderRadius: 8, // TODO: is there a better way to do this?
   },
   container: {
     borderWidth: 1,
@@ -190,14 +188,12 @@ const addItemStyles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     alignItems: "center",
-    // justifyContent: "center",
     flexDirection: "row",
     marginVertical: 4,
   },
   buttonText: {
     fontSize: 18,
     color: "#ccc",
-    // paddingBottom: 1,
   },
   sectionButton: {
     height: 100,
@@ -278,7 +274,6 @@ function EditMenuItem({ editItem, setEditItem, saveEditItem }) {
                       ...editItem.customize.map((section) => section.id)
                     ) + 1
                   : 1,
-              // data: [],
             },
           ],
     });

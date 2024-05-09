@@ -14,8 +14,6 @@ import Menu from "./Menu";
 
 function EditEvent({ event, setEvent, saveEvent }) {
   return (
-    // <Modal animationType="none" transparent={true} visible={event != null}>
-    //   <View style={styles.container3} />
     <Modal
       animationType="slide"
       transparent={true}
@@ -55,15 +53,12 @@ function EditEvent({ event, setEvent, saveEvent }) {
         </View>
       )}
     </Modal>
-    // </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // padding: 16,
     flex: 1,
-    // backgroundColor: "white",
   },
   container2: {
     marginTop: 100,
@@ -74,8 +69,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   container3: {
-    // marginTop: 100,
-    // padding: 16,
     flex: 1,
     backgroundColor: "rgba(64, 64, 64, .5)",
   },

@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-// import {
-//   SafeAreaProvider,
-//   useSafeAreaInsets,
-// } from "react-native-safe-area-context";
 import { db } from "../../firebaseConfig";
 import { doc, onSnapshot, collection } from "firebase/firestore";
 import Orders from "./Orders";
@@ -18,7 +14,6 @@ function Chef() {
   const [madeToOrder, setMadeToOrder] = useState([]);
   const [cooking, setCooking] = useState([]);
   const [cooked, setCooked] = useState([]);
-  //   const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -63,7 +58,6 @@ function Chef() {
     );
   }, [menu]);
   return (
-    // <SafeAreaProvider>
     <ChefContext.Provider
       value={{
         menu,
@@ -75,22 +69,11 @@ function Chef() {
         setCooked,
       }}
     >
-      <Tab.Navigator
-        style={
-          {
-            // Paddings to handle safe area
-            //   paddingTop: insets.top,
-            //   paddingBottom: insets.bottom,
-            //   paddingLeft: insets.left,
-            //   paddingRight: insets.right,
-          }
-        }
-      >
+      <Tab.Navigator>
         <Tab.Screen name="What's Cookin'" component={Cooking} />
         <Tab.Screen name="Orders" component={Orders} />
       </Tab.Navigator>
     </ChefContext.Provider>
-    // </SafeAreaProvider>
   );
 }
 

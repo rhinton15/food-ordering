@@ -271,12 +271,9 @@ function ReviewOrder({ navigation }) {
         collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "orders"),
         { name, order, time: Date.now() }
       );
-      //   order.id = docRef.id;
-      //   setOrders([...orders, order]);
     } catch (ex) {
       console.log(ex);
     }
-    //   navigation.goBack();
     setOrder([]);
     setName("");
     navigation.navigate("Order Submitted");
@@ -286,8 +283,6 @@ function ReviewOrder({ navigation }) {
     <>
       {order.length > 0 && (
         <View style={{ flex: 1 }}>
-          {/* <Text style={{ fontSize: 20, textAlign: "center" }}>Your Order</Text> */}
-
           <TextInput
             placeholder="Enter your name"
             value={name}
@@ -400,7 +395,6 @@ function OrderScreen({ menu }) {
 function Menu({ navigation }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const { menu, order, setOrder } = useContext(OrderContext);
-  // const [order, setOrder] = useState([]);
 
   function addToOrder(item) {
     const selections = item.customize?.flatMap((c) => c.selectedOptions || []);
@@ -409,10 +403,6 @@ function Menu({ navigation }) {
     setOrder([...order, item]);
     setSelectedItem(null);
   }
-
-  //   function removeFromOrder(index) {
-  //     setOrder(order.filter((_, i) => i !== index));
-  //   }
 
   function reviewOrder() {
     navigation.navigate("Review Order");
@@ -459,22 +449,6 @@ function Menu({ navigation }) {
           <Pressable style={styles.button} onPress={reviewOrder}>
             <Text style={styles.buttonText}>Review Order</Text>
           </Pressable>
-          //   <Button title="Review Order" onPress={reviewOrder} />
-          //   <View style={styles.order}>
-          //     <Text style={{ fontSize: 20, textAlign: "center" }}>
-          //       Your Order
-          //     </Text>
-          //     <ScrollView>
-          //       {order.map((item, index) => (
-          //         <MenuItem
-          //           key={index}
-          //           item={item}
-          //           editItem={() => removeFromOrder(index)}
-          //           style={{ backgroundColor: "transparent" }}
-          //         />
-          //       ))}
-          //     </ScrollView>
-          //   </View>
         )}
       </View>
     </>

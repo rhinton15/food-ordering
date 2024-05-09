@@ -38,7 +38,6 @@ function Event({ event, onPress }) {
     >
       <EventDate date={event.date} />
       <Text>{event.name}</Text>
-      {/* <Text>{event.date}</Text> */}
     </Pressable>
   );
 }
@@ -62,18 +61,13 @@ const eventStyles = StyleSheet.create({
   container: {
     padding: 5,
     flexDirection: "row",
-    // justifyContent: "space-between",
     alignItems: "center",
     gap: 16,
   },
 });
 
 const styles = StyleSheet.create({
-  container: {
-    // height: 125,
-    // flex: 1,
-    // flexGrow: 0,
-  },
+  container: {},
 });
 
 export default Events;

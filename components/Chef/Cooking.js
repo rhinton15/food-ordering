@@ -64,9 +64,6 @@ function Cooking(props) {
             borderWidth: 1,
             borderRadius: 8,
             borderColor: "#cccccc",
-            // borderColor: g.orders.some((o) => o.orderId === nextOrder.id)
-            //   ? "red"
-            //   : "#cccccc",
             padding: 8,
           }}
         >
