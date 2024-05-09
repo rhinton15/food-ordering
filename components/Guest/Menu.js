@@ -10,9 +10,14 @@ import {
   Text,
   View,
   StyleSheet,
+  TextInput,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { db } from "../../firebaseConfig";
+import { collection, doc, getDocs, addDoc, setDoc } from "firebase/firestore";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ItemSeparator from "../ItemSeparator";
+import { StackActions } from "@react-navigation/native";
 
 function CustomizeMenuItem({ selectedItem, setSelectedItem, addToOrder }) {
   function toggleOption(section, option) {
@@ -29,6 +34,19 @@ function CustomizeMenuItem({ selectedItem, setSelectedItem, addToOrder }) {
           : s
       ),
     });
+  }
+
+  function increaseQuantity() {
+    setSelectedItem({ ...selectedItem, quantity: selectedItem.quantity + 1 });
+  }
+
+  function decreaseQuantity() {
+    if (selectedItem.quantity > 1) {
+      setSelectedItem({
+        ...selectedItem,
+        quantity: selectedItem.quantity - 1,
+      });
+    }
   }
 
   return (
@@ -54,6 +72,12 @@ function CustomizeMenuItem({ selectedItem, setSelectedItem, addToOrder }) {
                 <Text style={{ textAlign: "center", fontSize: 20 }}>
                   {selectedItem.name}
                 </Text>
+                <Pressable
+                  style={{ position: "absolute", right: 0, top: 0 }}
+                  onPress={() => setSelectedItem(null)}
+                >
+                  <Text style={{ fontSize: 18 }}>X</Text>
+                </Pressable>
                 <View style={selectedStyles.scrollViewContainer}>
                   <ScrollView>
                     {selectedItem.customize &&
@@ -101,6 +125,37 @@ function CustomizeMenuItem({ selectedItem, setSelectedItem, addToOrder }) {
                       ))}
                   </ScrollView>
                 </View>
+                <View style={{ marginVertical: 10 }}>
+                  <Text style={{ alignSelf: "center" }}>Quantity</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Pressable
+                      style={{
+                        paddingHorizontal: 10,
+                      }}
+                      onPress={decreaseQuantity}
+                    >
+                      <Text style={{ fontSize: 32 }}>-</Text>
+                    </Pressable>
+                    <Text style={{ fontSize: 24 }}>
+                      {selectedItem.quantity}
+                    </Text>
+                    <Pressable
+                      style={{
+                        paddingHorizontal: 10,
+                      }}
+                      onPress={increaseQuantity}
+                    >
+                      <Text style={{ fontSize: 32 }}>+</Text>
+                    </Pressable>
+                  </View>
+                </View>
+                <ItemSeparator />
                 <Button
                   onPress={() => addToOrder(selectedItem)}
                   title="Add to Order"
@@ -137,28 +192,54 @@ const selectedStyles = StyleSheet.create({
   },
 });
 
-function MenuItem({ item, editItem, style }) {
+function MenuItem({ item, editItem, style, quantity, quantityStart }) {
   return (
     <Pressable
       onPress={editItem}
       style={({ pressed }) => [
         {
-          backgroundColor: pressed ? "#e3e3e3" : "white",
+          backgroundColor: pressed
+            ? "#e3e3e3"
+            : quantity > 0
+            ? "#ebf4ff"
+            : "white",
         },
         itemStyles.container,
         style,
       ]}
     >
-      <View style={itemStyles.textContainer}>
-        <Text style={itemStyles.label}>{item.name}</Text>
-        {item.customize &&
-          item.customize.map((custom) => (
-            <View style={itemStyles.customizeHeader} key={custom.name}>
-              <Text style={itemStyles.customizeText}>
-                {custom.name}: {custom.options?.join(", ")}
-              </Text>
-            </View>
-          ))}
+      <View style={{ flexDirection: quantityStart ? "row-reverse" : "row" }}>
+        <View style={itemStyles.textContainer}>
+          <Text style={itemStyles.label}>{item.name}</Text>
+          {item.customize &&
+            item.customize.map((custom) => (
+              <View style={itemStyles.customizeHeader} key={custom.name}>
+                {custom.options?.length > 0 && (
+                  <Text style={itemStyles.customizeText}>
+                    {custom.name}: {custom.options?.join(", ")}
+                  </Text>
+                )}
+              </View>
+            ))}
+        </View>
+        {quantity > 0 && (
+          <View
+            style={{
+              alignSelf: "center",
+              paddingHorizontal: 8,
+              width: 35,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              {quantity}
+            </Text>
+          </View>
+        )}
       </View>
     </Pressable>
   );
@@ -173,7 +254,7 @@ function MenuCategory({ title }) {
 }
 
 function ReviewOrder({ navigation }) {
-  const { order, setOrder } = useContext(OrderContext);
+  const { order, setOrder, name, setName } = useContext(OrderContext);
 
   function removeFromOrder(index) {
     const newOrder = order.filter((_, i) => i !== index);
@@ -183,32 +264,101 @@ function ReviewOrder({ navigation }) {
     }
   }
 
-  function submitOrder() {
+  async function submitOrder() {
+    if (!name) return;
+    try {
+      const docRef = await addDoc(
+        collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "orders"),
+        { name, order, time: Date.now() }
+      );
+      //   order.id = docRef.id;
+      //   setOrders([...orders, order]);
+    } catch (ex) {
+      console.log(ex);
+    }
+    //   navigation.goBack();
     setOrder([]);
-    navigation.goBack();
+    setName("");
+    navigation.navigate("Order Submitted");
   }
 
   return (
     <>
       {order.length > 0 && (
-        <View>
+        <View style={{ flex: 1 }}>
           {/* <Text style={{ fontSize: 20, textAlign: "center" }}>Your Order</Text> */}
-          <ScrollView>
-            {order.map((item, index) => (
-              <MenuItem
-                key={index}
-                item={item}
-                editItem={() => removeFromOrder(index)}
-                style={{ backgroundColor: "transparent" }}
-              />
-            ))}
-          </ScrollView>
 
-          <Pressable style={styles.button} onPress={submitOrder}>
-            <Text style={styles.buttonText}>Submit Order</Text>
-          </Pressable>
+          <TextInput
+            placeholder="Enter your name"
+            value={name}
+            onChangeText={(val) => setName(val)}
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              borderColor: "lightgray",
+              backgroundColor: "white",
+              fontSize: 16,
+              padding: 8,
+              margin: 8,
+            }}
+          />
+          <View style={{ flex: 1 }}>
+            <ScrollView>
+              {order
+                .sort((a, b) => {
+                  if (a.sectionId === b.sectionId) {
+                    return a.index - b.index;
+                  }
+
+                  return a.sectionId - b.sectionId;
+                })
+                .map((item, index) => (
+                  <View
+                    key={index}
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                  >
+                    <MenuItem
+                      item={item}
+                      quantity={item.quantity}
+                      quantityStart={true}
+                      style={{ backgroundColor: "transparent", flex: 1 }}
+                    />
+                    <Pressable
+                      onPress={() => removeFromOrder(index)}
+                      style={{ padding: 4 }}
+                    >
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={24}
+                        color="#ff7878"
+                      />
+                    </Pressable>
+                  </View>
+                ))}
+            </ScrollView>
+          </View>
+          {name && (
+            <Pressable style={styles.button} onPress={submitOrder}>
+              <Text style={styles.buttonText}>Submit Order</Text>
+            </Pressable>
+          )}
         </View>
       )}
+    </>
+  );
+}
+
+function OrderSubmitted({ navigation }) {
+  function newOrder() {
+    navigation.dispatch(StackActions.popToTop());
+  }
+
+  return (
+    <>
+      <Text style={{ paddingVertical: 12, fontSize: 24, alignSelf: "center" }}>
+        We got your order!
+      </Text>
+      <Button title="New Order" onPress={newOrder} />
     </>
   );
 }
@@ -217,8 +367,13 @@ const Stack = createNativeStackNavigator();
 function StackNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Build" component={Menu} />
-      <Stack.Screen name="Review" component={ReviewOrder} />
+      <Stack.Screen name="Build Order" component={Menu} />
+      <Stack.Screen name="Review Order" component={ReviewOrder} />
+      <Stack.Screen
+        name="Order Submitted"
+        component={OrderSubmitted}
+        options={{ headerBackVisible: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -226,12 +381,15 @@ function StackNavigator() {
 const OrderContext = createContext(null);
 function OrderScreen({ menu }) {
   const [order, setOrder] = useState([]);
+  const [name, setName] = useState();
   return (
     <OrderContext.Provider
       value={{
         menu,
         order,
         setOrder,
+        name,
+        setName,
       }}
     >
       <StackNavigator />
@@ -245,10 +403,9 @@ function Menu({ navigation }) {
   // const [order, setOrder] = useState([]);
 
   function addToOrder(item) {
-    const selections = item.customize?.flatMap((c) => c.selectedOptions);
+    const selections = item.customize?.flatMap((c) => c.selectedOptions || []);
     item.customize =
       selections?.length > 0 ? [{ name: "with", options: selections }] : null;
-    // console.log(item);
     setOrder([...order, item]);
     setSelectedItem(null);
   }
@@ -258,7 +415,7 @@ function Menu({ navigation }) {
   //   }
 
   function reviewOrder() {
-    navigation.navigate("Review");
+    navigation.navigate("Review Order");
   }
 
   return (
@@ -268,13 +425,29 @@ function Menu({ navigation }) {
         setSelectedItem={setSelectedItem}
         addToOrder={addToOrder}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "white" }}>
         <View style={styles.container}>
           <SectionList
             sections={menu}
             keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => (
-              <MenuItem item={item} editItem={() => setSelectedItem(item)} />
+            renderItem={({ item, section, index }) => (
+              <MenuItem
+                item={item}
+                quantity={order
+                  .filter(
+                    (o) => o.sectionId === section.id && o.index === index
+                  )
+                  .map((o) => o.quantity)
+                  .reduce((partialSum, a) => partialSum + a, 0)}
+                editItem={() =>
+                  setSelectedItem({
+                    ...item,
+                    sectionId: section.id,
+                    index,
+                    quantity: item.quantity || 1,
+                  })
+                }
+              />
             )}
             renderSectionHeader={({ section }) => (
               <MenuCategory title={section.title} />
@@ -350,6 +523,7 @@ const itemStyles = StyleSheet.create({
   },
   textContainer: {
     padding: 8,
+    flex: 1,
   },
   label: {
     fontSize: 16,

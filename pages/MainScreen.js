@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Organizer from "./Organizer";
 import User from "./User";
-import Chef from "./Chef";
+import Cook from "./Cook";
 
 const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
@@ -25,6 +25,7 @@ const TabNavigator = () => (
       name="Order"
       component={User}
       options={{
+        headerShown: false,
         tabBarIcon: ({ size, color }) => (
           <MaterialCommunityIcons name="food" size={size} color={color} />
         ),
@@ -32,8 +33,9 @@ const TabNavigator = () => (
     />
     <Tab.Screen
       name="Cook"
-      component={Chef}
+      component={Cook}
       options={{
+        // headerShown: false,
         tabBarIcon: ({ size, color }) => (
           <MaterialCommunityIcons name="chef-hat" size={size} color={color} />
         ),
