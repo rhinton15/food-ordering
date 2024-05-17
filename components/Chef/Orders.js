@@ -14,11 +14,18 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ChefContext } from "./ChefContext";
 
-function OrderItem({ item }) {
-  const { madeToOrder } = useContext(ChefContext);
+function OrderItem({ item, orderId }) {
+  const { madeToOrder, cooking } = useContext(ChefContext);
   const isMadeToOrder = madeToOrder.some(
     (m) => m.sectionId === item.sectionId && m.index === item.index
   );
+  const cookingItem = cooking.find(
+    (c) =>
+      c.orderId === orderId &&
+      c.sectionId == item.sectionId &&
+      c.index === item.index
+  );
+
   return (
     <View
       style={{ padding: 1, flexDirection: "row", alignItems: "flex-start" }}
@@ -33,6 +40,12 @@ function OrderItem({ item }) {
       >
         {!isMadeToOrder ? (
           <MaterialCommunityIcons name="check" color="#bbbbbb" />
+        ) : cookingItem ? (
+          cookingItem.done ? (
+            <MaterialCommunityIcons name="check-bold" color="#30ba55" />
+          ) : (
+            <MaterialCommunityIcons name="grill" color="#000000" />
+          )
         ) : (
           <MaterialCommunityIcons name="exclamation-thick" color="#ff3d3d" />
         )}
@@ -65,7 +78,7 @@ function Order({ order }) {
   async function toggleComplete() {
     order.done = !order.done;
     await updateDoc(
-      doc(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "orders", order.id),
+      doc(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "guestorders", order.id),
       {
         done: order.done,
       }
@@ -95,7 +108,7 @@ function Order({ order }) {
       </View>
       {!order.done &&
         order.order.map((item, i) => {
-          return <OrderItem key={i} item={item} />;
+          return <OrderItem key={i} item={item} orderId={order.id} />;
         })}
     </Pressable>
   );

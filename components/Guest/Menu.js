@@ -268,7 +268,7 @@ function ReviewOrder({ navigation }) {
     if (!name) return;
     try {
       const docRef = await addDoc(
-        collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "orders"),
+        collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "guestorders"),
         { name, order, time: Date.now() }
       );
     } catch (ex) {

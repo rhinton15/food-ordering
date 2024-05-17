@@ -17,7 +17,7 @@ function Chef() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "orders"),
+      collection(db, "events", "Cp4lD5Ko0ZP7WHVkL4BG", "guestorders"),
       (snapshot) => {
         let newOrders = [];
         snapshot.docChanges().forEach((change) => {
@@ -53,7 +53,7 @@ function Chef() {
               sectionId: section.id,
             };
           })
-          .filter((item) => item.customize?.length > 0)
+          .filter((item) => item.madeToOrder || item.customize?.length > 0)
       )
     );
   }, [menu]);
@@ -70,7 +70,7 @@ function Chef() {
       }}
     >
       <Tab.Navigator>
-        <Tab.Screen name="What's Cookin'" component={Cooking} />
+        <Tab.Screen name="Summary" component={Cooking} />
         <Tab.Screen name="Orders" component={Orders} />
       </Tab.Navigator>
     </ChefContext.Provider>
